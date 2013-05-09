@@ -1,0 +1,9 @@
+h1. Chef Cookbooks
+
+Forks, patches, extensions, etc. of Standard Cookboks and my own custom cookbooks.
+
+
+h1. See
+
+  http://www.opscode.com/chef/
+  https://github.com/applicationsonline/librarian-chef
