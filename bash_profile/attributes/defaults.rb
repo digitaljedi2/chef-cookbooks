@@ -1,1 +1,1 @@
-defaults['bash_profile']['git']['url'] = 'git@github.com:kyleburton/profile.git'
+default['bash_profile']['git']['url'] = 'https://github.com/kyleburton/profile.git'
