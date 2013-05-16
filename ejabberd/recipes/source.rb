@@ -22,7 +22,7 @@ test -d #{ejabber_dname} || tar xzvf #{ejabber_pkg_fname}
 cd #{ejabber_dname}/src
 test -f Makefile ./configure --prefix=#{ejabber_install_path}
 test -f #{ejabber_install_path}/sbin/ejabberdctl make && make install
-test -f #{ejabber_path} || ln -s #{ejabber_install_path} #{ejabber_path}
+test -h #{ejabber_path} || ln -s #{ejabber_install_path} #{ejabber_path}
   END
 end
 
