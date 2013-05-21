@@ -17,16 +17,22 @@ ejabber_remote_file = File.join(file_cache_path, ejabber_pkg_fname)
 
 bash "install-ejabberd" do
   # NB: run immediately if the file has already been downloaded
-  if ::File.exists? ejabber_remote_file
-    Chef::Log.info "local file already exists, will register install with action :run"
-    action  :run
-  else
-    Chef::Log.info "local does not already exist, will register install with action :nothing"
-    action  :nothing
-  end
+  #if ::File.exists? ejabber_remote_file
+  #  Chef::Log.info "local file already exists, will register install with action :run"
+  #  action  :run
+  #else
+  #  Chef::Log.info "local does not already exist, will register install with action :nothing"
+  #  action  :nothing
+  #end
   cwd     file_cache_path
   code <<-END
-date >> #{Chef::Config[:file_cache_path]}/ejabberd.out
+date > #{Chef::Config[:file_cache_path]}/ejabberd.out
+if [ -e #{ejabber_remote_file} ]; then
+  echo "jabber source already downloaded" >> #{Chef::Config[:file_cache_path]}/ejabberd.out
+else
+  curl #{ejabber_url} > #{ejabber_remote_file}
+fi
+
 if [ -d #{ejabber_dname} ]; then
   echo "archive already extracted" >> #{Chef::Config[:file_cache_path]}/ejabberd.out
 else
@@ -57,13 +63,13 @@ chown -R ejabberd.ejabberd #{ejabber_install_path}
   END
 end
 
-Chef::Log.info "configuring remote file: #{ejabber_remote_file}"
-remote_file ejabber_remote_file do
-  source ejabber_url
-  owner "root"
-  mode 0644
-  checksum node['ejabberd']['source']['checksum']
-  notifies :run, "bash[install-ejabberd]", :immediately
-  action :create_if_missing
-end
+# Chef::Log.info "configuring remote file: #{ejabber_remote_file}"
+# remote_file ejabber_remote_file do
+#   source ejabber_url
+#   owner "root"
+#   mode 0644
+#   checksum node['ejabberd']['source']['checksum']
+#   notifies :run, "bash[install-ejabberd]", :immediately
+#   action :create_if_missing
+# end
 
